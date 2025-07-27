@@ -29,6 +29,22 @@
       text-align: center;
       margin-bottom: 10px;
     }
+    
+    .toggle-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    
+    .toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -37,8 +53,11 @@
   <div class="info">
     小方塊已經在網頁上顯示！<br>
     你可以：<br>
-    • 拖拽移動它<br>
-    • 點擊改變顏色
+    • 拖拽移動它
   </div>
+  
+  <button id="toggleBtn" class="toggle-btn">隱藏方塊</button>
+  
+  <script src="popup.js"></script>
 </body>
 </html>

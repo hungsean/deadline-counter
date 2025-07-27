@@ -1,3 +1,7 @@
+// 全局變量跟踪方塊狀態
+let floatingBox = null;
+let isBoxVisible = true;
+
 // 創建漂浮小方塊
 function createFloatingBox() {
   // 檢查是否已經存在，避免重複創建
@@ -17,16 +21,24 @@ function createFloatingBox() {
   
   // 添加到頁面
   document.body.appendChild(box);
+  floatingBox = box;
   
   // 添加拖拽功能
   makeDraggable(box);
-  
-  // 添加點擊事件
-  box.addEventListener('click', function() {
-    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    box.style.backgroundColor = randomColor;
-  });
+}
+
+// 顯示/隱藏方塊
+function toggleBox() {
+  if (floatingBox) {
+    isBoxVisible = !isBoxVisible;
+    floatingBox.style.display = isBoxVisible ? 'flex' : 'none';
+  }
+  return isBoxVisible;
+}
+
+// 獲取方塊狀態
+function getBoxStatus() {
+  return isBoxVisible;
 }
 
 // 實現拖拽功能
@@ -125,6 +137,16 @@ function makeDraggable(element) {
     element.style.cursor = 'grab';
   }
 }
+
+// 監聽來自popup的消息
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.action === 'toggle') {
+    const newStatus = toggleBox();
+    sendResponse({isVisible: newStatus});
+  } else if (request.action === 'getStatus') {
+    sendResponse({isVisible: getBoxStatus()});
+  }
+});
 
 // 等待頁面加載完成後創建小方塊
 if (document.readyState === 'loading') {
