@@ -3,28 +3,36 @@ let floatingBox = null;
 let isBoxVisible = true;
 
 // 創建漂浮小方塊
-function createFloatingBox() {
+async function createFloatingBox() {
   // 檢查是否已經存在，避免重複創建
   if (document.getElementById('floating-box')) {
     return;
   }
 
-  // 創建小方塊元素
-  const box = document.createElement('div');
-  box.id = 'floating-box';
-  box.className = 'floating-box';
-  box.innerHTML = '📦<br>拖我！';
-  
-  // 設置初始位置
-  box.style.left = '20px';
-  box.style.top = '20px';
-  
-  // 添加到頁面
-  document.body.appendChild(box);
-  floatingBox = box;
-  
-  // 添加拖拽功能
-  makeDraggable(box);
+  try {
+    // 獲取HTML模板
+    const htmlUrl = chrome.runtime.getURL('content.html');
+    const response = await fetch(htmlUrl);
+    const htmlText = await response.text();
+    
+    // 創建臨時容器來解析HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlText;
+    const box = tempDiv.firstElementChild;
+    
+    // 設置初始位置
+    box.style.left = '20px';
+    box.style.top = '20px';
+    
+    // 添加到頁面
+    document.body.appendChild(box);
+    floatingBox = box;
+    
+    // 添加拖拽功能
+    makeDraggable(box);
+  } catch (error) {
+    console.error('創建漂浮方塊失敗:', error);
+  }
 }
 
 // 顯示/隱藏方塊

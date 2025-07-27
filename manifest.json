@@ -19,5 +19,12 @@
   "action": {
     "default_popup": "popup.html",
     "default_title": "漂浮小方塊"
-  }
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["content.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
