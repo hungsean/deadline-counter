@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "漂浮小方塊插件",
+  "version": "1.0",
+  "description": "在網頁上顯示一個可拖拽的漂浮小方塊",
+  
+  "permissions": [
+    "activeTab"
+  ],
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "漂浮小方塊"
+  }
+}
