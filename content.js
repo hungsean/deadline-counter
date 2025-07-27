@@ -69,6 +69,56 @@ function makeDraggable(element) {
   }
 
   function dragEnd() {
+    // 邊緣吸附配置
+    const margin = 20; // 可配置的邊距
+    
+    // 獲取視窗尺寸和元素尺寸
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const elementWidth = element.offsetWidth;
+    const elementHeight = element.offsetHeight;
+    
+    // 計算到各邊的距離
+    const distanceToLeft = currentX;
+    const distanceToRight = windowWidth - (currentX + elementWidth);
+    const distanceToTop = currentY;
+    const distanceToBottom = windowHeight - (currentY + elementHeight);
+    
+    // 找到最近的邊緣
+    const distances = [
+      { edge: 'left', distance: distanceToLeft, x: margin, y: currentY },
+      { edge: 'right', distance: distanceToRight, x: windowWidth - elementWidth - margin, y: currentY },
+      { edge: 'top', distance: distanceToTop, x: currentX, y: margin },
+      { edge: 'bottom', distance: distanceToBottom, x: currentX, y: windowHeight - elementHeight - margin }
+    ];
+    
+    const nearestEdge = distances.reduce((min, current) => 
+      current.distance < min.distance ? current : min
+    );
+    
+    // 總是吸附到最近的邊緣
+    // 確保吸附位置在視窗範圍內
+    const snapX = Math.max(margin, Math.min(windowWidth - elementWidth - margin, nearestEdge.x));
+    const snapY = Math.max(margin, Math.min(windowHeight - elementHeight - margin, nearestEdge.y));
+    
+    // 添加吸附動畫類
+    element.classList.add('snapping');
+    
+    // 設置新位置
+    element.style.left = snapX + 'px';
+    element.style.top = snapY + 'px';
+    
+    // 更新偏移量
+    xOffset = snapX;
+    yOffset = snapY;
+    currentX = snapX;
+    currentY = snapY;
+    
+    // 移除動畫類
+    setTimeout(() => {
+      element.classList.remove('snapping');
+    }, 300);
+    
     initialX = currentX;
     initialY = currentY;
     isDragging = false;

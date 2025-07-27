@@ -28,6 +28,12 @@
   transform: scale(0.95);
 }
 
+/* 吸附動畫效果 */
+.floating-box.snapping {
+  transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
 /* 確保在任何網站上都能正常顯示 */
 .floating-box * {
   box-sizing: border-box;
