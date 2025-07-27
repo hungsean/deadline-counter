@@ -1,22 +1,22 @@
 .floating-box {
   position: fixed;
-  width: 80px;
-  height: 80px;
+  width: 140px;
+  height: 60px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border-radius: 15px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
+  flex-direction: column;
+  font-size: 11px;
   font-weight: bold;
   text-align: center;
-  cursor: grab;
+  cursor: default;
   z-index: 10000;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   user-select: none;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 0;
 }
 
 .floating-box:hover {
@@ -32,6 +32,45 @@
 .floating-box.snapping {
   transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
               top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 拖拽手柄樣式 */
+.drag-handle {
+  width: 100%;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 15px 15px 5px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  font-size: 14px;
+  font-weight: bold;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.drag-handle:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* 時間顯示區域 */
+.time-display {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+}
+
+.countdown-time {
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: center;
 }
 
 /* 確保在任何網站上都能正常顯示 */

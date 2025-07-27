@@ -67,7 +67,8 @@ function makeDraggable(element) {
     initialX = e.clientX - xOffset;
     initialY = e.clientY - yOffset;
 
-    if (e.target === element) {
+    // 只允許透過拖拽手柄來拖動
+    if (e.target.classList.contains('drag-handle')) {
       isDragging = true;
       element.style.cursor = 'grabbing';
     }
