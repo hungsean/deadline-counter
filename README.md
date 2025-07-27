@@ -1,57 +1,69 @@
-# 漂浮小方塊插件 (Floating Box Chrome Extension)
+# 漂浮小方塊插件 (Chrome 擴充功能)
 
-A simple Chrome extension that adds a draggable floating box widget to any webpage.
+一個簡單的 Chrome 擴充功能，可在任何網頁上新增可拖曳的漂浮方塊元件。
 
-## Features
-- 📦 Draggable floating box that appears on all web pages
-- 🎨 Click to change colors randomly
-- 🖱️ Smooth drag and drop functionality
-- 🔒 Minimal permissions (activeTab only)
+## 功能特色
 
-## Installation
-1. Clone or download this repository
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable "Developer mode" in the top right
-4. Click "Load unpacked" and select the project folder
-5. The extension should now be active on all web pages
+* 📦 可拖曳的漂浮方塊，出現在所有網頁上
+* 🎨 點擊即可隨機更換顏色
+* 🖱️ 流暢的拖放操作
+* 🔒 最小權限（僅 `activeTab`）
 
-## Development
+## 安裝方式
 
-### Project Structure
-```
+1. 複製或下載此儲存庫
+2. 開啟 Chrome 並前往 `chrome://extensions/`
+3. 開啟右上角「開發者模式」
+4. 點擊「載入未封裝項目」並選擇專案資料夾
+5. 此擴充功能即會在所有網頁啟用
+
+## 開發說明
+
+### 專案結構
+
+```plaintext
 deadline-counter/
-├── manifest.json      # Extension manifest
-├── content.js         # Main functionality
-├── content.css        # Styling
-├── popup.html         # Extension popup
-├── CLAUDE.md          # Claude Code collaboration docs
-└── README.md          # This file
+├── manifest.json      # 擴充功能描述檔
+├── content.js         # 主要功能
+├── content.css        # 樣式檔案
+├── popup.html         # 擴充功能彈出視窗
+├── popup.js           # 處理 popup.html 中的邏輯
+├── CLAUDE.md          # Claude Code 協作文件
+└── README.md          # 本文件
 ```
 
-### Working with Claude Code
-This project is set up for collaboration with Claude Code. See `CLAUDE.md` for detailed project context, coding conventions, and development guidelines.
+### Claude Code 協作
 
-### Key Files
-- **manifest.json**: Chrome Extension Manifest V3 configuration
-- **content.js**: Contains the floating box creation and drag functionality
-- **content.css**: Styles for the floating box widget
-- **popup.html**: Extension popup interface
+本專案已設定 Claude Code 協作。詳見 `CLAUDE.md`，內含專案背景、程式碼規範與開發指南。
 
-## Technical Details
-- **Manifest Version**: 3
-- **Permissions**: `activeTab` (minimal permissions approach)
-- **Injection**: Content script runs on all URLs
-- **Browser Support**: Chrome/Chromium browsers
+### 主要檔案
 
-## Usage
-Once installed, the extension automatically adds a small draggable box to every webpage you visit. You can:
-- Drag the box around the page
-- Click it to change its background color
-- The box will persist as you navigate within the same tab
+* **manifest.json**：Chrome 擴充功能 Manifest V3 設定
+* **content.js**：包含漂浮方塊建立與拖曳功能
+* **content.css**：漂浮方塊樣式
+* **popup.html**：擴充功能彈出介面
+* **popup.js**：處理 popup.html 中的邏輯
 
-## Contributing
-When working on this project:
-1. Follow the coding conventions outlined in `CLAUDE.md`
-2. Test changes across multiple websites
-3. Maintain Chinese comments for consistency
-4. Use minimal permissions approach for security
+## 技術細節
+
+* **Manifest 版本**：3
+* **權限**：`activeTab`（最小權限策略）
+* **注入方式**：內容指令碼運行於所有 URL
+* **瀏覽器支援**：Chrome/Chromium 瀏覽器
+
+## 使用方式
+
+安裝後，擴充功能會自動在每個網頁加入一個小型漂浮方塊。您可以：
+
+* 拖曳方塊至任意位置
+* 點擊方塊更換背景顏色
+* 方塊會在同一分頁內持續存在
+
+## 貢獻指南
+
+參與此專案時：
+
+1. 遵循 `CLAUDE.md` 中的程式碼規範
+2. 在多個網站測試您的變更
+3. 維持中文註解以保持一致性
+4. 採用最小權限策略以確保安全性
