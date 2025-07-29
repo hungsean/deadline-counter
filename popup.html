@@ -20,8 +20,6 @@
     .info {
       font-size: 14px;
       line-height: 1.4;
-      text-align: center;
-      margin-bottom: 15px;
     }
     
     .emoji {
@@ -29,14 +27,20 @@
       text-align: center;
       margin-bottom: 10px;
     }
+
+    .toggle-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      padding: 0 5px;
+    }
     
     .switch {
       position: relative;
       display: inline-block;
-      width: 60px;
-      height: 34px;
-      margin: 0 auto;
-      display: block;
+      width: 40px;
+      height: 22px;
     }
 
     .switch input {
@@ -54,16 +58,16 @@
       bottom: 0;
       background-color: #ccc;
       transition: .4s;
-      border-radius: 34px;
+      border-radius: 22px;
     }
 
     .slider:before {
       position: absolute;
       content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
       background-color: white;
       transition: .4s;
       border-radius: 50%;
@@ -78,21 +82,22 @@
     }
 
     input:checked + .slider:before {
-      transform: translateX(26px);
+      transform: translateX(18px);
     }
   </style>
 </head>
 <body>
   <div class="emoji">📦</div>
   <h3>漂浮小方塊</h3>
-  <div class="info">
-    顯示/隱藏方塊
+  <div class="toggle-container">
+    <div class="info">
+      顯示/隱藏方塊
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="toggleSwitch">
+      <span class="slider"></span>
+    </label>
   </div>
-  
-  <label class="switch">
-    <input type="checkbox" id="toggleSwitch">
-    <span class="slider"></span>
-  </label>
   
   <script src="popup.js"></script>
 </body>
