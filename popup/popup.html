@@ -34,6 +34,24 @@
     />
   </div>
 
+  <!-- 新增：目標個數 -->
+  <div class="input-container">
+    <label for="countInput" class="info">目標個數</label>
+
+    <!-- 包一層，才能在右側疊字 -->
+    <div class="unit-input">
+      <input
+        type="number"
+        id="countInput"
+        placeholder="25"
+        min="1"
+        step="1"
+        autocomplete="off"
+      />
+      <span class="unit">個/hr</span>
+    </div>
+  </div>
+
   <script src="popup.js"></script>
 </body>
 </html>

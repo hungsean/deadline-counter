@@ -111,3 +111,28 @@ input:checked + .slider:before {
   align-self: flex-start;  /* 在 column 佈局下貼左，不延伸整排 */
   cursor: pointer;         /* 保留可點擊游標 */
 }
+
+/* ===== 目標個數：讓「個/hr」在輸入框外 ===== */
+.unit-input {
+  /* 取消原本 position:relative，改用 flex 並排 */
+  position: static;
+  display: flex;
+  align-items: center;
+  gap: 6px;             /* 框與單位的水平距離 */
+}
+
+.unit-input input {
+  /* 不再需要額外的右內距，也不要 100% 滿版 */
+  flex: 0 1 70px;       /* 70px 起跳，視空間可自動伸縮 */
+  width: 0;             /* 搭配 flex 讓它可縮，再由 padding 撐開 */
+  padding-right: 10px;  /* 還原內距避免文字貼邊 */
+}
+
+.unit-input .unit {
+  position: static;     /* 回到正常文流 */
+  font-size: 13px;
+  white-space: nowrap;  /* 避免被自動換行 */
+  color: rgba(255, 255, 255, 0.8);
+  pointer-events: none; /* 仍然不擋操作 */
+}
+
