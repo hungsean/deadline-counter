@@ -3,7 +3,7 @@ let floatingBox;            // DOM 參考
 let isBoxVisible = true;    // 顯 / 隱 狀態
 let startTime  = null;      // ISO 字串
 let targetCount = null;     // 正整數
-const REFRESH_MS = 15_000;  // 15 秒
+const REFRESH_MS = 1_000;
 const DEFAULT_VISIBLE = true;      // 抽成常數，方便以後改
 
 /* ─────────── 建立方塊 ─────────── */
@@ -32,14 +32,40 @@ async function createFloatingBox() {
   });
 }
 
+/* ─────────── 工具：將 Date 轉成 YYYY-MM-DD HH:MM:SS ─────────── */
+function formatDateTime(d){
+  const pad = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ` +
+         `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
 /* ─────────── 計算並更新文字 ─────────── */
 function updateDisplay() {
   const boxText = floatingBox.querySelector('.countdown-time');
-  if (!startTime || !targetCount) {
+  const startEl = floatingBox.querySelector('.start-time');
+  const nowEl   = floatingBox.querySelector('.current-time');
+
+  // 如果尚未設定開始時間，全部清空
+  if (!startTime) {
+    boxText.textContent = '尚未設定';
+    startEl.textContent = '';
+    nowEl.textContent   = '';
+    return;
+  }
+
+  // 更新「開始」與「現在」時間
+  const now = new Date();
+  startEl.textContent = formatDateTime(new Date(startTime));
+  nowEl.textContent   = formatDateTime(now);
+
+  // 尚未設定產量目標就只顯示時間
+  if (!targetCount) {
     boxText.textContent = '尚未設定';
     return;
   }
-  const hrs = (Date.now() - new Date(startTime).getTime()) / 3_600_000;
+
+  // 計算產量
+  const hrs = (now.getTime() - new Date(startTime).getTime()) / 3_600_000;
   const produced = Math.floor(hrs * targetCount);
   boxText.textContent = `${produced}`;
 }
