@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "漂浮小方塊插件",
-  "version": "1.0",
-  "description": "在網頁上顯示一個可拖拽的漂浮小方塊",
+  "name": "Deadline Counter",
+  "version": "0.1",
+  "description": "計算距離死線多久的小工具",
   
   "permissions": [
     "activeTab",
@@ -20,7 +20,7 @@
   
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "漂浮小方塊"
+    "default_title": "Deadline Counter"
   },
   
   "web_accessible_resources": [
