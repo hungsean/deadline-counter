@@ -1,73 +1,22 @@
-# 截止時間倒數計時器 (Chrome 擴充功能)
+# Deadline Counter
 
-一個實用的 Chrome 擴充功能，可在任何網頁上顯示漂浮的截止時間顯示方塊，協助您追蹤重要的截止日期。
+## 簡介
 
-## 功能特色
+Deadline Counter 是一個 Chrome 擴充功能，主要功能是「計算距離死線多久的小工具」。
 
-* ⏰ 顯示截止時間 (2025/07/25 17:31:12)，方便追蹤重要日期
-* 🎯 限制拖拽功能：只能透過上方三點手柄 (⋯) 進行拖拽
-* 🧠 智慧邊緣吸附：拖拽後自動吸附到最近的螢幕邊緣
-* 🎨 現代化設計：漸層背景與圓角設計
-* 🔒 最小權限（僅 `activeTab`）
+## 安裝說明
 
-## 安裝方式
+1. 前往 Chrome 瀏覽器的「擴充功能」頁面 (`chrome://extensions`)。
+2. 啟用右上角的「開發人員模式」。
+3. 點擊「載入未封裝項目」，並選擇本專案的資料夾。
 
-1. 複製或下載此儲存庫
-2. 開啟 Chrome 並前往 `chrome://extensions/`
-3. 開啟右上角「開發者模式」
-4. 點擊「載入未封裝項目」並選擇專案資料夾
-5. 此擴充功能即會在所有網頁啟用
+## 實作原理
 
-## 開發說明
+本擴充功能主要由以下幾個部分構成：
 
-### 專案結構
+*   **Popup (`popup/`)**: 使用者點擊擴充功能圖示時所看到的介面，可以在此設定新的 deadline。
+*   **Content Script (`content/`)**: 在使用者瀏覽的頁面上注入腳本，用以顯示倒數計時的介面。
+*   **Manifest (`manifest.json`)**: 定義擴充功能的元數據、權限以及所需的檔案。
 
-```plaintext
-deadline-counter/
-├── manifest.json      # 擴充功能描述檔
-├── content.js         # 主要功能邏輯
-├── content.css        # 漂浮方塊樣式
-├── content.html       # 漂浮方塊 HTML 模板
-├── popup.html         # 擴充功能彈出視窗
-├── popup.js           # 處理 popup.html 中的邏輯
-├── CLAUDE.md          # Claude Code 協作文件
-└── README.md          # 本文件
-```
-
-### Claude Code 協作
-
-本專案已設定 Claude Code 協作。詳見 `CLAUDE.md`，內含專案背景、程式碼規範與開發指南。
-
-### 主要檔案
-
-* **manifest.json**：Chrome 擴充功能 Manifest V3 設定
-* **content.js**：包含漂浮方塊建立、時間顯示與限制拖拽功能
-* **content.css**：漂浮方塊與拖拽手柄樣式
-* **content.html**：包含拖拽手柄與時間顯示的 HTML 結構
-* **popup.html**：擴充功能彈出介面
-* **popup.js**：處理方塊顯示/隱藏切換功能
-
-## 技術細節
-
-* **Manifest 版本**：3
-* **權限**：`activeTab`（最小權限策略）
-* **注入方式**：內容指令碼運行於所有 URL
-* **瀏覽器支援**：Chrome/Chromium 瀏覽器
-
-## 使用方式
-
-安裝後，擴充功能會自動在每個網頁加入一個時間顯示方塊。您可以：
-
-* 點擊上方三點手柄 (⋯) 拖拽方塊至任意位置
-* 方塊會自動吸附到最近的螢幕邊緣
-* 透過擴充功能圖標切換方塊顯示/隱藏
-* 時間顯示區域不可拖拽，避免誤觸
-
-## 貢獻指南
-
-參與此專案時：
-
-1. 遵循 `CLAUDE.md` 中的程式碼規範
-2. 在多個網站測試您的變更
-3. 維持中文註解以保持一致性
-4. 採用最小權限策略以確保安全性
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
