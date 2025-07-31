@@ -11,7 +11,7 @@ async function createFloatingBox() {
 
   try {
     // 獲取HTML模板
-    const htmlUrl = chrome.runtime.getURL('content.html');
+    const htmlUrl = chrome.runtime.getURL('content/content.html');
     const response = await fetch(htmlUrl);
     const htmlText = await response.text();
     

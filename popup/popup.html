@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <title>Deadline Counter</title>
+  <style>
+    /* 既有 CSS 保留，僅略作壓縮以節省篇幅 */
+    body{
+      width:200px;padding:20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;margin:0
+    }
+    h3{margin:0 0 15px;text-align:center}
+    .info{font-size:14px;line-height:1.4}
+    .emoji{font-size:24px;text-align:center;margin-bottom:10px}
+    .toggle-container{display:flex;justify-content:space-between;align-items:center;margin-top:15px;padding:0 5px}
+    .switch{position:relative;width:40px;height:22px}
+    .switch input{opacity:0;width:0;height:0}
+    .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;transition:.4s;border-radius:22px}
+    .slider:before{content:"";position:absolute;height:18px;width:18px;left:2px;bottom:2px;background:#fff;transition:.4s;border-radius:50%}
+    input:checked + .slider{background:#667eea}
+    input:checked + .slider:before{transform:translateX(18px)}
+  </style>
+</head>
+<body>
+  <div class="emoji">📦</div>
+  <h3>Deadline Counter</h3>
+
+  <div class="toggle-container">
+    <span class="info">顯示／隱藏方塊</span>
+
+    <!-- 使用 div+label+input，使 label 明確關聯到 input -->
+    <div class="switch">
+      <input type="checkbox" id="toggleSwitch" />
+      <label for="toggleSwitch" class="slider"></label>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
