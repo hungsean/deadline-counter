@@ -5,9 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const countInput   = document.getElementById('countInput');
 
   /* ---------- 讀取已存的設定 ---------- */
-  chrome.storage.sync.get(['startTime', 'targetCount'], (data) => {
+  chrome.storage.sync.get(['startTime', 'targetCount', 'boxVisible'], (data) => {
     if (data.startTime)  timeInput.value  = data.startTime;
     if (data.targetCount) countInput.value = data.targetCount;
+    toggleSwitch.checked = (typeof data.boxVisible === 'boolean') ? data.boxVisible : true;
   });
 
   /* ---------- 輸入即儲存 ---------- */
@@ -20,23 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
   timeInput .addEventListener('blur',   save);
   countInput.addEventListener('blur',   save);
   timeInput .addEventListener('keyup',  (e)=>e.key==='Enter'&&save());
-  countInput.addEventListener('keyup',  (e)=>e.key==='Enter'&&save());
+  countInput.addEventListener('keyup', (e) => e.key === 'Enter' && save());
+  toggleSwitch.addEventListener('change', () => {
+    const newState = toggleSwitch.checked;
+    chrome.storage.sync.set({ boxVisible: newState });
 
-  /* ---------- 顯示 / 隱藏開關 ---------- */
-  chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-    const tabId = tabs[0].id;
-
-    // 讀取目前方塊狀態
-    chrome.tabs.sendMessage(tabId, {action: 'getStatus'}, (res) => {
-      if (!chrome.runtime.lastError && res) toggleSwitch.checked = res.isVisible;
-    });
-
-    // 切換事件
-    toggleSwitch.addEventListener('change', () => {
-      chrome.tabs.sendMessage(tabId, {action: 'toggle'}, (res) => {
-        if (chrome.runtime.lastError) console.log('無法切換方塊', chrome.runtime.lastError);
-        if (res) toggleSwitch.checked = res.isVisible;
-      });
-    });
   });
+
 });

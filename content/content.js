@@ -4,6 +4,7 @@ let isBoxVisible = true;    // 顯 / 隱 狀態
 let startTime  = null;      // ISO 字串
 let targetCount = null;     // 正整數
 const REFRESH_MS = 15_000;  // 15 秒
+const DEFAULT_VISIBLE = true;      // 抽成常數，方便以後改
 
 /* ─────────── 建立方塊 ─────────── */
 async function createFloatingBox() {
@@ -21,9 +22,11 @@ async function createFloatingBox() {
   makeDraggable(floatingBox);
 
   // 先讀 storage，再啟動計時
-  chrome.storage.sync.get(['startTime', 'targetCount'], (data) => {
+  chrome.storage.sync.get(['startTime', 'targetCount', 'boxVisible'], (data) => {
     startTime   = data.startTime   || null;
     targetCount = data.targetCount || null;
+    isBoxVisible  = (typeof data.boxVisible === 'boolean') ? data.boxVisible : DEFAULT_VISIBLE;
+    floatingBox.style.display = isBoxVisible ? 'flex' : 'none';
     updateDisplay();                    // 立即算一次
     setInterval(updateDisplay, REFRESH_MS);
   });
@@ -46,6 +49,10 @@ chrome.storage.onChanged.addListener((changes, area)=>{
   if (area!=='sync') return;
   if (changes.startTime)   startTime   = changes.startTime.newValue;
   if (changes.targetCount) targetCount = changes.targetCount.newValue;
+  if (changes.boxVisible) {
+    isBoxVisible = changes.boxVisible.newValue;
+    floatingBox.style.display = isBoxVisible ? 'flex' : 'none';
+  }
   updateDisplay();
 });
 
@@ -53,6 +60,7 @@ chrome.storage.onChanged.addListener((changes, area)=>{
 function toggleBox() {
   isBoxVisible = !isBoxVisible;
   floatingBox.style.display = isBoxVisible ? 'flex' : 'none';
+  chrome.storage.sync.set({ boxVisible: isBoxVisible });
   return isBoxVisible;
 }
 function getBoxStatus() { return isBoxVisible; }
@@ -157,7 +165,8 @@ function makeDraggable(element) {
 /* ─────────── 監聽 popup 訊息 ─────────── */
 chrome.runtime.onMessage.addListener((req, _, sendResponse)=>{
   if (req.action==='toggle')     sendResponse({isVisible: toggleBox()});
-  if (req.action==='getStatus')  sendResponse({isVisible: getBoxStatus()});
+  if (req.action === 'getStatus') sendResponse({ isVisible: getBoxStatus() });
+  
 });
 
 /* ─────────── 執行 ─────────── */
