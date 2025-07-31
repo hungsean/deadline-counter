@@ -4,6 +4,9 @@
 
 Deadline Counter 是一個 Chrome 擴充功能，主要功能是「計算距離死線多久的小工具」。
 
+<img width="302" height="350" alt="image" src="https://github.com/user-attachments/assets/6a7afa09-3a57-4cdb-94d8-6e139df452b1" />
+<img width="196" height="161" alt="image" src="https://github.com/user-attachments/assets/0b5aad38-7b21-4e26-bfc5-24a851dd0a9e" />
+
 ## 安裝說明
 
 1. 前往 Chrome 瀏覽器的「擴充功能」頁面 (`chrome://extensions`)。
