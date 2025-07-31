@@ -75,3 +75,39 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(18px);
 }
+
+.input-container {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;          /* label 與 input 的垂直間距 */
+}
+
+.input-container input {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15); /* 透光感，融入漸層背景 */
+  color: #fff;
+  backdrop-filter: blur(4px);            /* 毛玻璃效果 */
+  outline: 2px solid transparent;        /* 用 outline 才不會推擠版面 */
+  transition: background 0.25s, outline 0.25s, transform 0.2s;
+}
+
+.input-container input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.input-container input:focus {
+  background: rgba(255, 255, 255, 0.25);
+  outline-color: #a0b4ff;
+  transform: scale(1.02);
+}
+
+.input-container label {
+  display: inline-block;   /* 保持可點擊，同時不撐滿整排 */
+  width: fit-content;      /* 佔用實際文字寬度 (舊版瀏覽器可用 max-content) */
+  align-self: flex-start;  /* 在 column 佈局下貼左，不延伸整排 */
+  cursor: pointer;         /* 保留可點擊游標 */
+}
