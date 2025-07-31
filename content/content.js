@@ -1,54 +1,61 @@
-// 全局變量跟踪方塊狀態
-let floatingBox = null;
-let isBoxVisible = true;
+// content/content.js
+let floatingBox;            // DOM 參考
+let isBoxVisible = true;    // 顯 / 隱 狀態
+let startTime  = null;      // ISO 字串
+let targetCount = null;     // 正整數
+const REFRESH_MS = 15_000;  // 15 秒
 
-// 創建漂浮小方塊
+/* ─────────── 建立方塊 ─────────── */
 async function createFloatingBox() {
-  // 檢查是否已經存在，避免重複創建
-  if (document.getElementById('floating-box')) {
+  if (floatingBox) return;  // 已存在
+
+  const html = await fetch(chrome.runtime.getURL('content/content.html')).then(r=>r.text());
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  floatingBox = temp.firstElementChild;
+  document.body.appendChild(floatingBox);
+
+  // 初始位置
+  floatingBox.style.left = '20px';
+  floatingBox.style.top  = '20px';
+  makeDraggable(floatingBox);
+
+  // 先讀 storage，再啟動計時
+  chrome.storage.sync.get(['startTime', 'targetCount'], (data) => {
+    startTime   = data.startTime   || null;
+    targetCount = data.targetCount || null;
+    updateDisplay();                    // 立即算一次
+    setInterval(updateDisplay, REFRESH_MS);
+  });
+}
+
+/* ─────────── 計算並更新文字 ─────────── */
+function updateDisplay() {
+  const boxText = floatingBox.querySelector('.countdown-time');
+  if (!startTime || !targetCount) {
+    boxText.textContent = '尚未設定';
     return;
   }
-
-  try {
-    // 獲取HTML模板
-    const htmlUrl = chrome.runtime.getURL('content/content.html');
-    const response = await fetch(htmlUrl);
-    const htmlText = await response.text();
-    
-    // 創建臨時容器來解析HTML
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = htmlText;
-    const box = tempDiv.firstElementChild;
-    
-    // 設置初始位置
-    box.style.left = '20px';
-    box.style.top = '20px';
-    
-    // 添加到頁面
-    document.body.appendChild(box);
-    floatingBox = box;
-    
-    // 添加拖拽功能
-    makeDraggable(box);
-  } catch (error) {
-    console.error('創建漂浮方塊失敗:', error);
-  }
+  const hrs = (Date.now() - new Date(startTime).getTime()) / 3_600_000;
+  const produced = Math.floor(hrs * targetCount);
+  boxText.textContent = `${produced}`;
 }
 
-// 顯示/隱藏方塊
+/* ─────────── storage 變動同步 ─────────── */
+chrome.storage.onChanged.addListener((changes, area)=>{
+  if (area!=='sync') return;
+  if (changes.startTime)   startTime   = changes.startTime.newValue;
+  if (changes.targetCount) targetCount = changes.targetCount.newValue;
+  updateDisplay();
+});
+
+/* ─────────── 顯 / 隱 & 拖拽 (原邏輯保留) ─────────── */
 function toggleBox() {
-  if (floatingBox) {
-    isBoxVisible = !isBoxVisible;
-    floatingBox.style.display = isBoxVisible ? 'flex' : 'none';
-  }
+  isBoxVisible = !isBoxVisible;
+  floatingBox.style.display = isBoxVisible ? 'flex' : 'none';
   return isBoxVisible;
 }
-
-// 獲取方塊狀態
-function getBoxStatus() {
-  return isBoxVisible;
-}
-
+function getBoxStatus() { return isBoxVisible; }
 // 實現拖拽功能
 function makeDraggable(element) {
   let isDragging = false;
@@ -147,19 +154,13 @@ function makeDraggable(element) {
   }
 }
 
-// 監聽來自popup的消息
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.action === 'toggle') {
-    const newStatus = toggleBox();
-    sendResponse({isVisible: newStatus});
-  } else if (request.action === 'getStatus') {
-    sendResponse({isVisible: getBoxStatus()});
-  }
+/* ─────────── 監聽 popup 訊息 ─────────── */
+chrome.runtime.onMessage.addListener((req, _, sendResponse)=>{
+  if (req.action==='toggle')     sendResponse({isVisible: toggleBox()});
+  if (req.action==='getStatus')  sendResponse({isVisible: getBoxStatus()});
 });
 
-// 等待頁面加載完成後創建小方塊
-if (document.readyState === 'loading') {
+/* ─────────── 執行 ─────────── */
+if (document.readyState==='loading') {
   document.addEventListener('DOMContentLoaded', createFloatingBox);
-} else {
-  createFloatingBox();
-}
+} else { createFloatingBox(); }

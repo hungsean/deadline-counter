@@ -5,8 +5,10 @@
   "description": "在網頁上顯示一個可拖拽的漂浮小方塊",
   
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
+
   
   "content_scripts": [
     {

@@ -1,46 +1,42 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
+  /* ---------- DOM ---------- */
   const toggleSwitch = document.getElementById('toggleSwitch');
-  const toggleContainer = document.querySelector('.toggle-container');
+  const timeInput    = document.getElementById('timeInput');
+  const countInput   = document.getElementById('countInput');
 
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    // 檢查是否為支援的頁面
-    if (tabs[0].url.startsWith('http')) {
-      // 獲取當前狀態
-      chrome.tabs.sendMessage(tabs[0].id, {action: 'getStatus'}, function(response) {
-        if (chrome.runtime.lastError) {
-          console.log('無法連接到內容腳本，可能是在不支援的頁面上。');
-          toggleSwitch.disabled = true;
-          return;
-        }
-        if (response && response.isVisible !== undefined) {
-          updateSwitch(response.isVisible);
-        }
-      });
-    } else {
-      console.log('在不支援的頁面上，禁用切換功能。');
-      toggleSwitch.disabled = true;
-    }
+  /* ---------- 讀取已存的設定 ---------- */
+  chrome.storage.sync.get(['startTime', 'targetCount'], (data) => {
+    if (data.startTime)  timeInput.value  = data.startTime;
+    if (data.targetCount) countInput.value = data.targetCount;
   });
 
-  // 開關狀態改變事件
-  toggleSwitch.addEventListener('change', function() {
-    if (toggleSwitch.disabled) return;
+  /* ---------- 輸入即儲存 ---------- */
+  function save() {
+    chrome.storage.sync.set({
+      startTime:   timeInput.value.trim(),        // 建議用有效的 ISO 字串
+      targetCount: +countInput.value || null      // 轉成數字；空字串存 null
+    });
+  }
+  timeInput .addEventListener('blur',   save);
+  countInput.addEventListener('blur',   save);
+  timeInput .addEventListener('keyup',  (e)=>e.key==='Enter'&&save());
+  countInput.addEventListener('keyup',  (e)=>e.key==='Enter'&&save());
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, {action: 'toggle'}, function(response) {
-        if (chrome.runtime.lastError) {
-          console.log('無法連接到內容腳本。');
-          return;
-        }
-        if (response && response.isVisible !== undefined) {
-          updateSwitch(response.isVisible);
-        }
+  /* ---------- 顯示 / 隱藏開關 ---------- */
+  chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+    const tabId = tabs[0].id;
+
+    // 讀取目前方塊狀態
+    chrome.tabs.sendMessage(tabId, {action: 'getStatus'}, (res) => {
+      if (!chrome.runtime.lastError && res) toggleSwitch.checked = res.isVisible;
+    });
+
+    // 切換事件
+    toggleSwitch.addEventListener('change', () => {
+      chrome.tabs.sendMessage(tabId, {action: 'toggle'}, (res) => {
+        if (chrome.runtime.lastError) console.log('無法切換方塊', chrome.runtime.lastError);
+        if (res) toggleSwitch.checked = res.isVisible;
       });
     });
   });
-
-  // 更新開關狀態
-  function updateSwitch(isVisible) {
-    toggleSwitch.checked = isVisible;
-  }
 });

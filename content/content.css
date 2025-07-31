@@ -1,7 +1,7 @@
 .floating-box {
   position: fixed;
-  width: 140px;
-  height: 60px;
+  width: 80px;
+  height: 62px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border-radius: 15px;
@@ -67,7 +67,7 @@
 }
 
 .countdown-time {
-  font-size: 10px;
+  font-size: 25px;
   line-height: 1.2;
   text-align: center;
 }
